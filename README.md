@@ -23,3 +23,20 @@ Also because of this implementation is about websocket communication between cli
 
 ## 2.2. Modifying the websocket port
 When we modify by changing the port number at `Server::bind` function in the server code. We also need to change the port number where the client connects to in the `Client::connect` function. Because if the ports of client and server diffrent when server for example waiting on port 8080 but client try to listen to port 2000, the connection on client will automatically refused. Because there is no websocket running on port 2000.
+
+## 2.3. Small changes. Add some information to client
+When i modify on server.rs from previously 
+
+```
+    println!("From client {addr:?} {text:?}");
+    bcast_tx.send(text.into())?;
+```
+into
+```
+    println!("From client{}: {}", addr, text);
+    bcast_tx.send(format!("{}: {}", addr, text))?;
+```
+
+![Gambar 3](./static/G3.png)
+
+Now any meessage that server got also will contain the address of the current client that made the request, and the very same data will displayed on any client computer it's connected into.
